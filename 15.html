@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="img/favicon.ico">
-  <title>Home - Embedded C for Arm Cortex-M Microcontrollers</title>
+  <title>Constants and literals - Embedded C for Arm Cortex-M Microcontrollers</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Home";
-    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_name = "Constants and literals";
+    var mkdocs_page_input_path = "15.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -47,10 +47,8 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="index.html">Home</a>
-    <ul class="current">
-    </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
                     </li>
                 </ul>
                 <ul>
@@ -61,8 +59,18 @@
                     <li class="toctree-l1"><a class="reference internal" href="10.html">Variables, identifiers and data types</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="15.html">Constants and literals</a>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="15.html">Constants and literals</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-declare-a-constant">How to declare a constant</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#types-of-literals">Types of literals</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#string-literals">String literals</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
                     </li>
                 </ul>
                 <ul>
@@ -150,10 +158,10 @@
     
       
     
-    <li>Home</li>
+    <li>Constants and literals</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/index.md"
+        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/15.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -164,11 +172,64 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="preface">Preface</h1>
-<p>This reference manual is intended to help programmers of Arm Cortex-M based microcontrollers to master their devices. It is a reference for the C language, the most widely used language for embedded microcontrollers.</p>
-<p>This reference manual explains the underlying concepts of the C language and shows the Arm related specifics. For example, being a 32-bit architecture, access to memory is different than for the good old 8051.</p>
-<p>The labs are using <a href="https://www2.keil.com/mdk5">Arm Keil MDK</a>, the integrated development environment (IDE) from Arm for microcontrollers. The free MDK-Lite edition is sufficient to follow the examples that are part of this manual. To download and install the tool, just follow the <a href="http://www2.keil.com/mdk5/install/">instructions on keil.com</a>. For most labs, no access to hardware is required, as the labs run in the µVision simulator. For working with real hardware, there is plenty of third party material available, just take a look at the link list at the end of the manual.</p>
-<p>I hope that you find this reference manual useful in your daily work. Happy coding!</p>
+                <h1 id="constants-and-literals">Constants and literals</h1>
+<p>What are constants and literals?</p>
+<blockquote>
+<p>A literal is a notation for representing a fixed value in source code. A constant is a value that cannot be altered by the program during normal execution.</p>
+</blockquote>
+<p>In other words: a literal is the actual value (such as a number or character for example), that is assigned to a variable or constant. You can also use literals directly as a function parameter or as an operand in an expression.
+While both terms are often used interchangeably, they are not the same. A literal is a constant, but a constant is not a literal.</p>
+<p>Constants, as the name implies, never change their value which makes development changes easy and eliminates the use of "magic numbers".</p>
+<h3 id="how-to-declare-a-constant">How to declare a constant</h3>
+<p>There are two ways to declare a constant:</p>
+<pre><code class="c">#define identifierName value
+const type identifierName value;
+</code></pre>
+
+<ul>
+<li>The <code>identifierName</code> is the constant, while the <code>value</code> is the literal.</li>
+<li>The first way is very efficient for an embedded system, as it does not consume any memory in the microcontroller. Using the <code>#define</code>, you declare a text substitution label, which means that each instance of <code>identifierName</code> will be replaced with value by the preprocessor unless <code>identifierName</code> is inside a string.</li>
+<li>A <code>#define</code> is <em>never</em> terminated with a <code>';'</code>, unless you want that semicolon to be part of the substitution.</li>
+<li>The second way allocates a variable in program memory, but it cannot be changed due to the <code>const</code> keyword. While this is inefficient for normal constants, it is a good way to save lookup tables in Flash memory for example.</li>
+</ul>
+<h2 id="types-of-literals">Types of literals</h2>
+<p>The Arm assembler user's guide states that "source code can contain numeric, string, Boolean, and single character literals".</p>
+<p>Literals can be expressed as:</p>
+<ul>
+<li>Decimal numbers, for example <code>123</code>.</li>
+<li>Hexadecimal numbers, for example <code>0x7B</code>.</li>
+<li>Numbers in any base from 2 to 9, for example <code>5_204</code> is a number in base 5.</li>
+<li>Floating point numbers, for example <code>123.4</code>.</li>
+<li>Boolean values <code>{TRUE}</code> or <code>{FALSE}</code>.</li>
+<li>Single character values enclosed by single quotes, for example <code>'w'</code>.</li>
+<li>Strings enclosed in double quotes, for example <code>"This is a string"</code>.</li>
+</ul>
+<h3 id="string-literals">String literals</h3>
+<p>C does not have a string type. One way to store strings in C is to use arrays of characters. Later, we will learn how to use pointers to define strings.</p>
+<p>When strings are declared as character arrays, they are stored like other types of arrays in C. If you declare the string without a dimension, the null character is automatically appended to the end of the string:</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">char name[] = &quot;Cortex&quot;;
+</code></pre>
+
+<p>This is stored as:</p>
+<pre><code class="c">name[0] = 'C'
+name[1] = 'o'
+name[2] = 'r'
+name[3] = 't'
+name[4] = 'e'
+name[5] = 'x'
+name[6] = '\0'
+</code></pre>
+
+<p><strong>Special characters in strings</strong></p>
+<p>Use escape sequences to include special characters in strings, just like any other ordinary character. The backslash <code>'\'</code> plus the following character is considered as a single character with a single ASCII value.</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">char salutation[] = &quot;Dear Paul,\n&quot;;
+</code></pre>
+
+<p>In order to nest strings, you need to escape the double quotes:</p>
+<pre><code class="c">&quot;printf (\&quot;hello world!\n\&quot;)&quot;
+</code></pre>
               
             </div>
           </div>
@@ -176,8 +237,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="05.html" class="btn btn-neutral float-right" title="Comments">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="20.html" class="btn btn-neutral float-right" title="The printf() C library function">Next <span class="icon icon-circle-arrow-right"></span></a>
       
+      
+        <a href="10.html" class="btn btn-neutral" title="Variables, identifiers and data types"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -205,8 +268,10 @@
           <a href="https://github.com/mcusuperuser/embedded_c/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
+        <span><a href="10.html" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-        <span style="margin-left: 15px"><a href="05.html" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+        <span style="margin-left: 15px"><a href="20.html" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="img/favicon.ico">
-  <title>Home - Embedded C for Arm Cortex-M Microcontrollers</title>
+  <title>Macros - Embedded C for Arm Cortex-M Microcontrollers</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Home";
-    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_name = "Macros";
+    var mkdocs_page_input_path = "95.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -47,10 +47,8 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="index.html">Home</a>
-    <ul class="current">
-    </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
                     </li>
                 </ul>
                 <ul>
@@ -125,8 +123,14 @@
                     <li class="toctree-l1"><a class="reference internal" href="90.html">Enumerations</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="95.html">Macros</a>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="95.html">Macros</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#simple-macros">Simple macros</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#argument-macros">Argument macros</a>
+    </li>
+    </ul>
                     </li>
                 </ul>
       </div>
@@ -150,10 +154,10 @@
     
       
     
-    <li>Home</li>
+    <li>Macros</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/index.md"
+        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/95.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -164,11 +168,58 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="preface">Preface</h1>
-<p>This reference manual is intended to help programmers of Arm Cortex-M based microcontrollers to master their devices. It is a reference for the C language, the most widely used language for embedded microcontrollers.</p>
-<p>This reference manual explains the underlying concepts of the C language and shows the Arm related specifics. For example, being a 32-bit architecture, access to memory is different than for the good old 8051.</p>
-<p>The labs are using <a href="https://www2.keil.com/mdk5">Arm Keil MDK</a>, the integrated development environment (IDE) from Arm for microcontrollers. The free MDK-Lite edition is sufficient to follow the examples that are part of this manual. To download and install the tool, just follow the <a href="http://www2.keil.com/mdk5/install/">instructions on keil.com</a>. For most labs, no access to hardware is required, as the labs run in the µVision simulator. For working with real hardware, there is plenty of third party material available, just take a look at the link list at the end of the manual.</p>
-<p>I hope that you find this reference manual useful in your daily work. Happy coding!</p>
+                <h1 id="macros">Macros</h1>
+<p>What are macros?</p>
+<blockquote>
+<p>Macros allow for complex text replacements created with <code>#define</code> that insert code into your program. While macros may take parameters like a function, the macro code and parameters are always inserted into code by text substitution (this means that data types are not taken care of).</p>
+</blockquote>
+<p>Macros:
+- Are evaluated by the preprocessor
+- Cannot be executed by themselves
+- Are used to control the generation of code before the compilation process
+- Provide valuable shortcuts</p>
+<h2 id="simple-macros">Simple macros</h2>
+<p><strong>Syntax</strong></p>
+<pre><code class="c">#define label text
+</code></pre>
+
+<p><em>Note</em></p>
+<ul>
+<li>Every instance of <code>label</code> in the current file will be replaced by <code>text</code></li>
+<li><code>text</code> can be anything you can type into your editor</li>
+<li>Arithmetic expressions are evaluated at compile time</li>
+</ul>
+<p><strong>Code example (system_ARMCM3.c)</strong></p>
+<pre><code class="c">/*----------------------------------------------------------------------------
+  Define clocks
+ *----------------------------------------------------------------------------*/
+#define  XTAL            (50000000UL)     /* Oscillator frequency */
+#define  SYSTEM_CLOCK    (XTAL / 2U)
+
+/*----------------------------------------------------------------------------
+  System Core Clock Variable
+ *----------------------------------------------------------------------------*/
+uint32_t SystemCoreClock = SYSTEM_CLOCK;  /* System Core Clock Frequency */
+</code></pre>
+
+<h2 id="argument-macros">Argument macros</h2>
+<p>Argument macros create function-like macros:</p>
+<p><strong>Syntax</strong></p>
+<pre><code class="c">#define label(arg1, ..., argn) code
+</code></pre>
+
+<p><em>Note</em></p>
+<ul>
+<li>The code must fit on a single line. For multi-line macros use '\' to split lines</li>
+<li>Arguments are inserted into code as text substitutions</li>
+<li>Each instance of <code>label()</code> will be expanded into code</li>
+</ul>
+<p><strong>Code example (arm_math.h)</strong></p>
+<pre><code class="c">#define __SIMD32(addr)        (*(__SIMD32_TYPE **) &amp; (addr))
+#define __SIMD32_CONST(addr)  ( (__SIMD32_TYPE * )   (addr))
+#define _SIMD32_OFFSET(addr)  (*(__SIMD32_TYPE * )   (addr))
+#define __SIMD64(addr)        (*(      int64_t **) &amp; (addr))
+</code></pre>
               
             </div>
           </div>
@@ -176,8 +227,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="05.html" class="btn btn-neutral float-right" title="Comments">Next <span class="icon icon-circle-arrow-right"></span></a>
       
+        <a href="90.html" class="btn btn-neutral" title="Enumerations"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -205,8 +256,8 @@
           <a href="https://github.com/mcusuperuser/embedded_c/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
+        <span><a href="90.html" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-        <span style="margin-left: 15px"><a href="05.html" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

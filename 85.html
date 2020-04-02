@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="img/favicon.ico">
-  <title>Home - Embedded C for Arm Cortex-M Microcontrollers</title>
+  <title>Unions - Embedded C for Arm Cortex-M Microcontrollers</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Home";
-    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_name = "Unions";
+    var mkdocs_page_input_path = "85.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -47,10 +47,8 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="index.html">Home</a>
-    <ul class="current">
-    </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
                     </li>
                 </ul>
                 <ul>
@@ -117,8 +115,18 @@
                     <li class="toctree-l1"><a class="reference internal" href="80.html">Peripheral access using CMSIS</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="85.html">Unions</a>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="85.html">Unions</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#purpose-of-unions">Purpose of unions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#creating-unions-with-typedefs">Creating unions with typedefs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#unions-in-memory">Unions in memory</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#unions-vs-structures">Unions vs. structures</a>
+    </li>
+    </ul>
                     </li>
                 </ul>
                 <ul>
@@ -150,10 +158,10 @@
     
       
     
-    <li>Home</li>
+    <li>Unions</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/index.md"
+        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/85.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -164,11 +172,74 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="preface">Preface</h1>
-<p>This reference manual is intended to help programmers of Arm Cortex-M based microcontrollers to master their devices. It is a reference for the C language, the most widely used language for embedded microcontrollers.</p>
-<p>This reference manual explains the underlying concepts of the C language and shows the Arm related specifics. For example, being a 32-bit architecture, access to memory is different than for the good old 8051.</p>
-<p>The labs are using <a href="https://www2.keil.com/mdk5">Arm Keil MDK</a>, the integrated development environment (IDE) from Arm for microcontrollers. The free MDK-Lite edition is sufficient to follow the examples that are part of this manual. To download and install the tool, just follow the <a href="http://www2.keil.com/mdk5/install/">instructions on keil.com</a>. For most labs, no access to hardware is required, as the labs run in the µVision simulator. For working with real hardware, there is plenty of third party material available, just take a look at the link list at the end of the manual.</p>
-<p>I hope that you find this reference manual useful in your daily work. Happy coding!</p>
+                <h1 id="unions">Unions</h1>
+<p>What are unions?</p>
+<blockquote>
+<p>Unions are similar to structures but a union’s members all share the same memory location. In essence a union is a variable that is capable of holding different types of data at different times.</p>
+</blockquote>
+<p>Unions:
+- may contain any number of members which may be of any data type.
+- are as large as their largest member.
+- use exactly the same syntax as structures except <code>struct</code> is replaced with <code>union</code>.</p>
+<p><strong>Syntax</strong></p>
+<pre><code class="c">union unionName {
+    type1 memberName1;
+    ...
+    typen memberNamen;
+}
+</code></pre>
+
+<p><strong>Code example</strong></p>
+<pre><code class="c">union mixedPickles {
+    char c;
+    int i;
+    float f;
+}
+</code></pre>
+
+<h2 id="purpose-of-unions">Purpose of unions</h2>
+<p>A <code>union</code> allows the same memory location to be used for different data types. The amount of memory that is allocated for the union is determined by its largest member. This saves space, especially for large structures where the programmer can be sure that the same members never occur at the same time.</p>
+<h2 id="creating-unions-with-typedefs">Creating unions with typedefs</h2>
+<p><strong>Syntax</strong></p>
+<pre><code class="c">typedef union unionTag {
+    type1 memberName1;
+    ...
+    typen memberNamen;
+} typeName;
+</code></pre>
+
+<p><strong>Code example</strong></p>
+<pre><code class="c">// Union type to access the Application Program Status Register (APSR).
+typedef union
+{
+  struct
+  {
+    uint32_t _reserved0:27;    // bit:  0..26  Reserved
+    uint32_t Q:1;              // bit:     27  Saturation condition flag
+    uint32_t V:1;              // bit:     28  Overflow condition code flag
+    uint32_t C:1;              // bit:     29  Carry condition code flag
+    uint32_t Z:1;              // bit:     30  Zero condition code flag
+    uint32_t N:1;              // bit:     31  Negative condition code flag
+  } b;                         // Structure used for bit  access
+  uint32_t w;                  // Type      used for word access
+} APSR_Type;
+</code></pre>
+
+<h2 id="unions-in-memory">Unions in memory</h2>
+<p>Union variables may be declared exactly like structure variables. The big difference is that only memory is allocated to accommodate the union’s largest member. For a structure, memory is allocated to accommodate for the whole structure.</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">typedef union {
+    uint8_t m;
+    uint16_t n;
+    uint32_t l;
+} myUnion;
+
+myUnion univar;
+</code></pre>
+
+<p><img alt="Unions in memory" src="img/unions_in_memory.png" /></p>
+<h2 id="unions-vs-structures">Unions vs. structures</h2>
+<p>Unions allow viewing and manipulating the same memory location using different data types. Structures enable the grouping of multiple data types and while accessing them individually.</p>
               
             </div>
           </div>
@@ -176,8 +247,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="05.html" class="btn btn-neutral float-right" title="Comments">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="90.html" class="btn btn-neutral float-right" title="Enumerations">Next <span class="icon icon-circle-arrow-right"></span></a>
       
+      
+        <a href="80.html" class="btn btn-neutral" title="Peripheral access using CMSIS"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -205,8 +278,10 @@
           <a href="https://github.com/mcusuperuser/embedded_c/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
+        <span><a href="80.html" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-        <span style="margin-left: 15px"><a href="05.html" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+        <span style="margin-left: 15px"><a href="90.html" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

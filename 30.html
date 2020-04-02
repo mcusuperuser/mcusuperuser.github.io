@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="img/favicon.ico">
-  <title>Home - Embedded C for Arm Cortex-M Microcontrollers</title>
+  <title>Expressions and statements - Embedded C for Arm Cortex-M Microcontrollers</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Home";
-    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_name = "Expressions and statements";
+    var mkdocs_page_input_path = "30.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -47,10 +47,8 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="index.html">Home</a>
-    <ul class="current">
-    </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
                     </li>
                 </ul>
                 <ul>
@@ -73,8 +71,16 @@
                     <li class="toctree-l1"><a class="reference internal" href="25.html">Operators</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="30.html">Expressions and statements</a>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="30.html">Expressions and statements</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#expression-statements">Expression statements</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compound-or-block-statements">Compound or block statements</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#control-statements">Control statements</a>
+    </li>
+    </ul>
                     </li>
                 </ul>
                 <ul>
@@ -150,10 +156,10 @@
     
       
     
-    <li>Home</li>
+    <li>Expressions and statements</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/index.md"
+        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/30.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -164,11 +170,54 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="preface">Preface</h1>
-<p>This reference manual is intended to help programmers of Arm Cortex-M based microcontrollers to master their devices. It is a reference for the C language, the most widely used language for embedded microcontrollers.</p>
-<p>This reference manual explains the underlying concepts of the C language and shows the Arm related specifics. For example, being a 32-bit architecture, access to memory is different than for the good old 8051.</p>
-<p>The labs are using <a href="https://www2.keil.com/mdk5">Arm Keil MDK</a>, the integrated development environment (IDE) from Arm for microcontrollers. The free MDK-Lite edition is sufficient to follow the examples that are part of this manual. To download and install the tool, just follow the <a href="http://www2.keil.com/mdk5/install/">instructions on keil.com</a>. For most labs, no access to hardware is required, as the labs run in the µVision simulator. For working with real hardware, there is plenty of third party material available, just take a look at the link list at the end of the manual.</p>
-<p>I hope that you find this reference manual useful in your daily work. Happy coding!</p>
+                <h1 id="expressions-and-statements">Expressions and statements</h1>
+<p>Every C program is made using statements. The program is executed statement by statement. Every statement is made using one or more expressions. An expression is a sequence of <a href="#operators">operators</a> and their operands that specifies a computation.</p>
+<p>In other words, an expression is an instruction that is executed and returns a value (even when this value is <code>void</code>). A statement is used to form the sequence of a program (see below).</p>
+<p>There are three kinds of statements in C:
+1. <a href="#expression-statements">Expression statements</a>
+1. <a href="#compound-or-block-statements">Compound statements</a>
+1. <a href="#control-statements">Control statements</a></p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">n + m
+a = b
+time = dist/speed
+x = ReadIO()
+f &lt;= 2
+y == 42
+count++
+c = b + 3
+</code></pre>
+
+<h2 id="expression-statements">Expression statements</h2>
+<p>An expression statement is an expression followed by a semicolon (<code>;</code>). The execution of the statements causes the expression to be evaluated.</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">a = 0;
+a++;
+b = 3 + c;
+y = (a * x) + b;
+printf(&quot;Speed = %f&quot;, x);
+; // the semicolon itself is an expression
+</code></pre>
+
+<h2 id="compound-or-block-statements">Compound or block statements</h2>
+<p>A compound statement is a group of statements enclosed within a pair of curly braces (<code>{ }</code>) and is often also called a block statement. The statements within the block may be of any statement type (including (again) compound statements). This allows statements to be embedded or nested within other statements. A compound statement <strong>does not</strong> end with a semicolon after the closing <code>}</code>.</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">{
+  a = 0;
+  a++;
+  b = 3 + c;
+  y = (a * x) + b;
+  printf(&quot;Speed = %f&quot;, x);
+}
+</code></pre>
+
+<h2 id="control-statements">Control statements</h2>
+<p>Control statments are used for loops, branches and logical tests and often require other statements to be embedded within them. We will take a closer look at them in the chapter <a href="#decision-making">Decision making</a>.</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">while (1) {
+    // do something here
+}
+</code></pre>
               
             </div>
           </div>
@@ -176,8 +225,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="05.html" class="btn btn-neutral float-right" title="Comments">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="35.html" class="btn btn-neutral float-right" title="Decision making">Next <span class="icon icon-circle-arrow-right"></span></a>
       
+      
+        <a href="25.html" class="btn btn-neutral" title="Operators"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -205,8 +256,10 @@
           <a href="https://github.com/mcusuperuser/embedded_c/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
+        <span><a href="25.html" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-        <span style="margin-left: 15px"><a href="05.html" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+        <span style="margin-left: 15px"><a href="35.html" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

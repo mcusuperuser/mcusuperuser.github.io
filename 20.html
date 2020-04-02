@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="img/favicon.ico">
-  <title>Home - Embedded C for Arm Cortex-M Microcontrollers</title>
+  <title>The printf() C library function - Embedded C for Arm Cortex-M Microcontrollers</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Home";
-    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_name = "The printf() C library function";
+    var mkdocs_page_input_path = "20.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -47,10 +47,8 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="index.html">Home</a>
-    <ul class="current">
-    </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
                     </li>
                 </ul>
                 <ul>
@@ -65,8 +63,14 @@
                     <li class="toctree-l1"><a class="reference internal" href="15.html">Constants and literals</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="20.html">The printf() C library function</a>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="20.html">The printf() C library function</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-use-printf">How to use printf()</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#conversion-characters-for-the-controlstring">Conversion characters for the ControlString</a>
+    </li>
+    </ul>
                     </li>
                 </ul>
                 <ul>
@@ -150,10 +154,10 @@
     
       
     
-    <li>Home</li>
+    <li>The printf() C library function</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/index.md"
+        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/20.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -164,11 +168,93 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="preface">Preface</h1>
-<p>This reference manual is intended to help programmers of Arm Cortex-M based microcontrollers to master their devices. It is a reference for the C language, the most widely used language for embedded microcontrollers.</p>
-<p>This reference manual explains the underlying concepts of the C language and shows the Arm related specifics. For example, being a 32-bit architecture, access to memory is different than for the good old 8051.</p>
-<p>The labs are using <a href="https://www2.keil.com/mdk5">Arm Keil MDK</a>, the integrated development environment (IDE) from Arm for microcontrollers. The free MDK-Lite edition is sufficient to follow the examples that are part of this manual. To download and install the tool, just follow the <a href="http://www2.keil.com/mdk5/install/">instructions on keil.com</a>. For most labs, no access to hardware is required, as the labs run in the µVision simulator. For working with real hardware, there is plenty of third party material available, just take a look at the link list at the end of the manual.</p>
-<p>I hope that you find this reference manual useful in your daily work. Happy coding!</p>
+                <h1 id="the-printf-c-library-function">The printf() C library function</h1>
+<p>One of the most commonly used C library function is the <code>printf()</code> function which allows to write text to the "standard output" (normally a monitor or line printer). In embedded systems, often a UART is used. In Arm Cortex-M based systems you can redirect the standard output to the ITM debug channel which saves resources (the UART) and is much faster. In µVision, you can use the <a href="https://www.keil.com/support/man/docs/uv4/uv4_db_dbg_printf_viewer.htm">"Debug printf() Viewer"</a> window to observe <code>printf()</code> messages delivered via ITM.</p>
+<p>Using the Arm C complier, it is mandatory to link your application with the standard C library, even you do not directly use C library functions. This is because the compiler might implicitly generate calls to C library functions.
+The standard C library consists of:
+- All functions defined by the ISO C99 library standard.
+- Target-dependent functions that implement the C library functions in the semihosted execution environment. You can redefine these functions in your own application.
+- Functions called implicitly by the compiler.
+- Arm extensions that are not defined by the ISO C library standard, but are included in the library.</p>
+<h3 id="how-to-use-printf">How to use printf()</h3>
+<pre><code class="c">printf(ControlString, arg1, ..., argn);
+</code></pre>
+
+<p>Everything within the <code>ControlString</code> is printed verbatim except <code>%d</code>'s
+which are replaced by the argument values from the list.</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">int n = 1, m = 7;
+printf(&quot;n = %d\nm = %d\n&quot;, n, m);
+</code></pre>
+
+<p>The output is:</p>
+<pre><code class="c">n = 1
+m = 7
+</code></pre>
+
+<p><em>Note</em></p>
+<ul>
+<li>The character <code>%d</code> is the <em>conversion character</em>.</li>
+</ul>
+<h3 id="conversion-characters-for-the-controlstring">Conversion characters for the ControlString</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Conversion character</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">%c</td>
+<td align="left">Single character</td>
+</tr>
+<tr>
+<td align="right">%s</td>
+<td align="left">String (all characters until <code>\0</code>)</td>
+</tr>
+<tr>
+<td align="right">%d</td>
+<td align="left">Signed decimal integer</td>
+</tr>
+<tr>
+<td align="right">%#</td>
+<td align="left">A <code>0x</code> should precede a hexadecimal number</td>
+</tr>
+<tr>
+<td align="right">%u</td>
+<td align="left">Unsigned decimal integer</td>
+</tr>
+<tr>
+<td align="right">%x</td>
+<td align="left">Unsigned hexadecimal integer with lowercase digits (<code>1a4e</code>)</td>
+</tr>
+<tr>
+<td align="right">%X</td>
+<td align="left">As x, but with uppercase digits (<code>1A4E</code>)</td>
+</tr>
+<tr>
+<td align="right">%f</td>
+<td align="left">Signed decimal value (floating point)</td>
+</tr>
+<tr>
+<td align="right">%e</td>
+<td align="left">Signed decimal with exponent (<code>1.13e-4</code>)</td>
+</tr>
+<tr>
+<td align="right">%E</td>
+<td align="left">As e, but uses E for exponent (<code>1.13E-4</code>)</td>
+</tr>
+<tr>
+<td align="right">%g</td>
+<td align="left">As e or f, but depends on size and precision of value</td>
+</tr>
+<tr>
+<td align="right">%G</td>
+<td align="left">As g, but uses E for exponent</td>
+</tr>
+</tbody>
+</table>
               
             </div>
           </div>
@@ -176,8 +262,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="05.html" class="btn btn-neutral float-right" title="Comments">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="25.html" class="btn btn-neutral float-right" title="Operators">Next <span class="icon icon-circle-arrow-right"></span></a>
       
+      
+        <a href="15.html" class="btn btn-neutral" title="Constants and literals"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -205,8 +293,10 @@
           <a href="https://github.com/mcusuperuser/embedded_c/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
+        <span><a href="15.html" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-        <span style="margin-left: 15px"><a href="05.html" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+        <span style="margin-left: 15px"><a href="25.html" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

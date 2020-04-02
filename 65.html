@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="img/favicon.ico">
-  <title>Home - Embedded C for Arm Cortex-M Microcontrollers</title>
+  <title>Function pointers - Embedded C for Arm Cortex-M Microcontrollers</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Home";
-    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_name = "Function pointers";
+    var mkdocs_page_input_path = "65.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -47,10 +47,8 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="index.html">Home</a>
-    <ul class="current">
-    </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
                     </li>
                 </ul>
                 <ul>
@@ -101,8 +99,18 @@
                     <li class="toctree-l1"><a class="reference internal" href="60.html">Pointers</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="65.html">Function pointers</a>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="65.html">Function pointers</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#declaration">Declaration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#initialization">Initialization</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#calling-a-function-via-a-function-pointer">Calling a function via a function pointer</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#passing-a-function-to-a-function">Passing a function to a function</a>
+    </li>
+    </ul>
                     </li>
                 </ul>
                 <ul>
@@ -150,10 +158,10 @@
     
       
     
-    <li>Home</li>
+    <li>Function pointers</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/index.md"
+        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/65.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -164,11 +172,53 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="preface">Preface</h1>
-<p>This reference manual is intended to help programmers of Arm Cortex-M based microcontrollers to master their devices. It is a reference for the C language, the most widely used language for embedded microcontrollers.</p>
-<p>This reference manual explains the underlying concepts of the C language and shows the Arm related specifics. For example, being a 32-bit architecture, access to memory is different than for the good old 8051.</p>
-<p>The labs are using <a href="https://www2.keil.com/mdk5">Arm Keil MDK</a>, the integrated development environment (IDE) from Arm for microcontrollers. The free MDK-Lite edition is sufficient to follow the examples that are part of this manual. To download and install the tool, just follow the <a href="http://www2.keil.com/mdk5/install/">instructions on keil.com</a>. For most labs, no access to hardware is required, as the labs run in the µVision simulator. For working with real hardware, there is plenty of third party material available, just take a look at the link list at the end of the manual.</p>
-<p>I hope that you find this reference manual useful in your daily work. Happy coding!</p>
+                <h1 id="function-pointers">Function pointers</h1>
+<p>You can use pointers to point to functions. This provides a more flexible way to call a function, as it gives a choice of which function to call and finally makes it possible to pass functions to other functions.</p>
+<h2 id="declaration">Declaration</h2>
+<p>A function pointer is declared much like a function prototype:</p>
+<p><strong>Syntax</strong></p>
+<pre><code class="c">int (*fp) (int a);
+</code></pre>
+
+<p><em>Note</em></p>
+<ul>
+<li>This is the declaration of a function pointer called <code>fp</code>.</li>
+<li>The function it points to must take one <code>int</code> parameter and must return an <code>int</code>.</li>
+</ul>
+<h2 id="initialization">Initialization</h2>
+<p>Initialize a function pointer by setting the pointer name equal to the function name:</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">int (*fp) (int a); // Function pointer
+int   foo (int a); // Function prototype
+
+// Initialization:
+fp = foo;          // fp points to foo
+</code></pre>
+
+<h2 id="calling-a-function-via-a-function-pointer">Calling a function via a function pointer</h2>
+<p>The following two calls to the function are equivalent: </p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">m = fp(a);  // call via function pointer
+m = foo(a); // direct call to foo
+</code></pre>
+
+<h2 id="passing-a-function-to-a-function">Passing a function to a function</h2>
+<p>The following example shows the basic concept:</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">int a, b;
+int add(int n, int m); // Function prototype
+int sub(int n, int m); // Function prototype
+
+//Function definition with function pointer parameter
+int foobar(int n, int n, int (*fp)(int, int)) {
+    return fp(n, m);   // Call function passed by pointer
+}
+
+void main(void) {
+    a = foobar (2, 72, &amp;add); // Pass address of add
+    b = foobar (31, 2, &amp;sub); // Pass address of sub
+}
+</code></pre>
               
             </div>
           </div>
@@ -176,8 +226,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="05.html" class="btn btn-neutral float-right" title="Comments">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="70.html" class="btn btn-neutral float-right" title="Structures">Next <span class="icon icon-circle-arrow-right"></span></a>
       
+      
+        <a href="60.html" class="btn btn-neutral" title="Pointers"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -205,8 +257,10 @@
           <a href="https://github.com/mcusuperuser/embedded_c/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
+        <span><a href="60.html" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-        <span style="margin-left: 15px"><a href="05.html" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+        <span style="margin-left: 15px"><a href="70.html" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

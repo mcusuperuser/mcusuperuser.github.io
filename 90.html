@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="img/favicon.ico">
-  <title>Home - Embedded C for Arm Cortex-M Microcontrollers</title>
+  <title>Enumerations - Embedded C for Arm Cortex-M Microcontrollers</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Home";
-    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_name = "Enumerations";
+    var mkdocs_page_input_path = "90.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -47,10 +47,8 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-                <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="index.html">Home</a>
-    <ul class="current">
-    </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
                     </li>
                 </ul>
                 <ul>
@@ -121,8 +119,20 @@
                     <li class="toctree-l1"><a class="reference internal" href="85.html">Unions</a>
                     </li>
                 </ul>
-                <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="90.html">Enumerations</a>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="90.html">Enumerations</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#enumeration-declaration">Enumeration declaration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#declaration-of-enumeration-tape-variable">Declaration of enumeration tape variable</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#tagless-enumeration-variable">Tagless enumeration variable</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#declare-an-enumeration-type-with-typedef">Declare an enumeration type with typedef</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#using-an-enumeration-type-variable">Using an enumeration type variable</a>
+    </li>
+    </ul>
                     </li>
                 </ul>
                 <ul>
@@ -150,10 +160,10 @@
     
       
     
-    <li>Home</li>
+    <li>Enumerations</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/index.md"
+        <a href="https://github.com/mcusuperuser/embedded_c/edit/master/docs/90.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -164,11 +174,93 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="preface">Preface</h1>
-<p>This reference manual is intended to help programmers of Arm Cortex-M based microcontrollers to master their devices. It is a reference for the C language, the most widely used language for embedded microcontrollers.</p>
-<p>This reference manual explains the underlying concepts of the C language and shows the Arm related specifics. For example, being a 32-bit architecture, access to memory is different than for the good old 8051.</p>
-<p>The labs are using <a href="https://www2.keil.com/mdk5">Arm Keil MDK</a>, the integrated development environment (IDE) from Arm for microcontrollers. The free MDK-Lite edition is sufficient to follow the examples that are part of this manual. To download and install the tool, just follow the <a href="http://www2.keil.com/mdk5/install/">instructions on keil.com</a>. For most labs, no access to hardware is required, as the labs run in the µVision simulator. For working with real hardware, there is plenty of third party material available, just take a look at the link list at the end of the manual.</p>
-<p>I hope that you find this reference manual useful in your daily work. Happy coding!</p>
+                <h1 id="enumerations">Enumerations</h1>
+<p>What are enumerations?</p>
+<blockquote>
+<p>Enumerations are user defined data types (with a limited range of values).</p>
+</blockquote>
+<p>Enumerations:
+- Are unique integer data types
+- May only contain a specified list of values
+- Values are specified as symbolic constants</p>
+<h2 id="enumeration-declaration">Enumeration declaration</h2>
+<p><strong>Syntax</strong></p>
+<pre><code class="c">enum typeName { label0, label1, ..., labeln }
+</code></pre>
+
+<p><em>Note</em></p>
+<ul>
+<li>The compiler sets label0 = 0, label1 = 1, labeln = n</li>
+</ul>
+<p><strong>Code example</strong></p>
+<pre><code class="c">enum month {JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC};
+</code></pre>
+
+<p><em>Note</em></p>
+<ul>
+<li>You can assign a specific value to any label</li>
+<li>Subsequent labels will increment from that value</li>
+</ul>
+<p><strong>Code example</strong></p>
+<pre><code class="c">enum group {Peter, Paul = 5, Mary};
+// label values: Peter = 0, Paul = 5, Mary = 6
+</code></pre>
+
+<h2 id="declaration-of-enumeration-tape-variable">Declaration of enumeration tape variable</h2>
+<p><strong>Declared along with type</strong></p>
+<pre><code class="c">enum typeName { list_of_constants } variable_name1, ...;
+</code></pre>
+
+<p><strong>Declared independently</strong></p>
+<pre><code class="c">enum typeName variable_name1, ...;
+</code></pre>
+
+<p><strong>Code example</strong></p>
+<pre><code class="c">enum month {JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC} current_month;
+
+enum month current_month;
+</code></pre>
+
+<h2 id="tagless-enumeration-variable">Tagless enumeration variable</h2>
+<p>If you omit the tape name, you can only have variables of that type that are specified as part of the <code>enum</code> declaration. Later, you cannot specify any additional variable of the <code>enum</code> type.  </p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">enum {JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC} current_month;
+</code></pre>
+
+<h2 id="declare-an-enumeration-type-with-typedef">Declare an enumeration type with <code>typedef</code></h2>
+<p>As always, variables can be declared as type <code>typeName</code> without requiring the keyword <code>enum</code>:</p>
+<p><strong>Syntax</strong></p>
+<pre><code class="c">typedef enum {list_of_constants} typeName;
+</code></pre>
+
+<p>The enumeration can now be used as an ordinary data type, such as int or float.</p>
+<p><strong>Code example</strong></p>
+<pre><code class="c">typedef enum {JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC} month;
+month current_month; // Variable of type month
+</code></pre>
+
+<h2 id="using-an-enumeration-type-variable">Using an enumeration type variable</h2>
+<p>If the enumeration and the variable have already been defined:</p>
+<p><strong>Syntax</strong></p>
+<pre><code class="c">varName = labeln;
+</code></pre>
+
+<p><em>Note</em></p>
+<ul>
+<li>Use the labels just like any other symbolic constant</li>
+<li>Enumeration type variables must only use the type’s labels or equivalent integer</li>
+</ul>
+<p><strong>Code example</strong></p>
+<pre><code class="c">enum color {red, green, blue};
+enum color myCar;
+
+myCar = red;
+myCar = 3;
+
+if (myCar == 2) {
+    // do something
+}
+</code></pre>
               
             </div>
           </div>
@@ -176,8 +268,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="05.html" class="btn btn-neutral float-right" title="Comments">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="95.html" class="btn btn-neutral float-right" title="Macros">Next <span class="icon icon-circle-arrow-right"></span></a>
       
+      
+        <a href="85.html" class="btn btn-neutral" title="Unions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -205,8 +299,10 @@
           <a href="https://github.com/mcusuperuser/embedded_c/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
+        <span><a href="85.html" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-        <span style="margin-left: 15px"><a href="05.html" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+        <span style="margin-left: 15px"><a href="95.html" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
